@@ -1,0 +1,19 @@
+name: Check Developer Branch Merge
+
+on:
+  pull_request:
+    branches:
+      - main  # This triggers the action only when a pull request is made to the main branch
+
+jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check source branch
+        run: |
+          if [[ "${{ github.head_ref }}" != "developer" ]]; then
+            echo "Error: Only pull requests from 'developer' branch can be merged into 'main'."
+            exit 1  # This blocks the PR by failing the check
+          else
+            echo "PR is from 'developer' branch, allowing merge."
+          fi
