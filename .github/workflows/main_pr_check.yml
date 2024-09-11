@@ -1,4 +1,4 @@
-name: Check Developer Branch Merge
+name: Check Develop Branch Merge
 
 on:
   pull_request:
@@ -11,9 +11,9 @@ jobs:
     steps:
       - name: Check source branch
         run: |
-          if [[ "${{ github.head_ref }}" != "developer" ]]; then
-            echo "Error: Only pull requests from 'developer' branch can be merged into 'main'."
+          if [[ "${{ github.head_ref }}" != "develop" ]]; then
+            echo "Error: Only pull requests from 'develop' branch can be merged into 'main'."
             exit 1  # This blocks the PR by failing the check
           else
-            echo "PR is from 'developer' branch, allowing merge."
+            echo "PR is from 'develop' branch, allowing merge."
           fi
