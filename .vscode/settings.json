@@ -17,5 +17,7 @@
     "doxdocgen.generic.returnTemplate": "@return ",
     "doxdocgen.generic.useGitUserName": true,
     "doxdocgen.generic.useGitUserEmail": true,
+    "cSpell.words": [
+        "drivercontrol"
     ]
 }
