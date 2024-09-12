@@ -17,8 +17,15 @@
 
 /* vex hardware */
 namespace Global {
-  /* competition instance, must be here to legally compete */
-  extern vex::competition competition;
-  /* the vex brain, for SDCard IO, the timer and battery info */
-  extern vex::brain brain;
+    /* competition instance, must be here to legally compete */
+    extern vex::competition competition;
+    /* the vex brain, for SDCard IO, the timer and battery info */
+    extern vex::brain brain;
+    /* the motors */
+    extern vex::motor left_motor1;
+    extern vex::motor left_motor2;
+    extern vex::motor left_motor3;
+    extern vex::motor right_motor1;
+    extern vex::motor right_motor2;
+    extern vex::motor right_motor3;
 }
