@@ -25,7 +25,7 @@ This is a guideline on how to contribute to the project.
 2. Create a new branch for your contribution:
    ```
    git checkout develop
-   git checkout -b contributor-some-issue
+   git checkout -b contributor/some-issue
    ```
    Relpace "contributor" with your name and "some-issue" with the purpose of the branch. 
 
@@ -45,58 +45,6 @@ This is a guideline on how to contribute to the project.
 6. Wait for the project owner to review and merge your PR.
 
 7. After merging, the temporary branch will be deleted.
-
-### Commit Message Format
-Follow this format for commit messages:
-```
-[type]: Something is done
-```
-### Common Git Commit Types
-
-- **feat**: A new feature for the project
-  - Example: `feat: add login functionality`
-
-- **fix**: A bug fix
-  - Example: `fix: resolve issue with user profile image loading`
-
-- **chore**: Routine tasks or maintenance (e.g., dependency updates)
-  - Example: `chore: update dependencies`
-
-- **docs**: Documentation changes
-  - Example: `docs: update README with API usage instructions`
-
-- **style**: Code style changes (formatting, missing semi-colons, etc.)
-  - Example: `style: format code using prettier`
-
-- **refactor**: A code change that neither fixes a bug nor adds a feature
-  - Example: `refactor: reorganize auth logic into separate module`
-
-- **test**: Adding missing tests or correcting existing tests
-  - Example: `test: add unit tests for login component`
-
-- **perf**: A code change that improves performance
-  - Example: `perf: optimize image loading with lazy loading`
-
-- **ci**: Continuous integration configuration changes
-  - Example: `ci: update GitHub Actions to run tests on all branches`
-
-- **build**: Changes that affect the build system or external dependencies
-  - Example: `build: update webpack configuration`
-
-- **revert**: Reverts a previous commit
-  - Example: `revert: undo previous commit of adding login feature`
-
-- **init**: Initial project setup or scaffolding
-  - Example: `init: initialize project with boilerplate code`
-
-- **merge**: Merging branches
-  - Example: `merge: merge feature branch into main`
-
-- **release**: A new release or version bump
-  - Example: `release: version 1.0.0`
-
-- **hotfix**: A critical fix for a bug in production
-  - Example: `hotfix: fix crash on startup due to missing config`
 
 ### Release Cycle
 - The `develop` branch is under constant active development.
@@ -280,6 +228,12 @@ int main() {
 }
 ```
 
+### 4. Namespace
+Importing all names from a namespace is prohibited. For example, the following code is not accepted: 
+```cpp
+using namespace vex;
+```
+
 ## Documentation Guidelines
 
 ### 1. Use Doxygen
@@ -346,13 +300,8 @@ private:
  */
 #define MAX_USERNAME_LENGTH 50
 
-/**
- * @namespace Global
- * @brief Contains global variables used throughout the application.
- */
 namespace Global {
     /**
-     * @var active_users
      * @brief The number of currently active users in the system.
      */
     extern int active_users;
