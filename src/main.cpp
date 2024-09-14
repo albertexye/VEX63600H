@@ -1,93 +1,160 @@
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/*    Module:       main.cpp                                                  */
-/*    Author:       alber                                                     */
-/*    Created:      9/10/2024, 11:01:51 PM                                    */
-/*    Description:  V5 project                                                */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
-
 #include "vex.h"
 
 using namespace vex;
-
-// A global instance of competition
 competition Competition;
 
-// define your global instances of motors and other devices here
+const auto DRIVE_SETUP = ZERO_TRACKER_NO_ODOM;
+const auto LeftMotors = motor_group(Left1, Left2, Left3);
+const auto RightMotors = motor_group(Right1, Right2, Right3);
+const auto INERTIAL_PORT = PORT1;
 
-/*---------------------------------------------------------------------------*/
-/*                          Pre-Autonomous Functions                         */
-/*                                                                           */
-/*  You may want to perform some actions before the competition starts.      */
-/*  Do them in the following function.  You must return from this function   */
-/*  or the autonomous and usercontrol tasks will not be started.  This       */
-/*  function is only called once after the V5 has been powered on and        */
-/*  not every time that the robot is disabled.                               */
-/*---------------------------------------------------------------------------*/
+// how many rounds the wheel turns after the motor completes a full round
+// FIXME: to be measured
+const auto EXTERNAL_RATIO = 1.4;
 
-void pre_auton(void) {
+// FIXME: to be measured
+const auto WHEEL_DIAMETER = 2.75; // in inches
 
-  // All activities that occur before the competition starts
-  // Example: clearing encoders, setting servo positions, ...
-}
+// gyro read after a 360-degree turn
+// FIXME: to be measured
+const auto GYRO_SCALE = 360; //  in degrees
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*                              Autonomous Task                              */
-/*                                                                           */
-/*  This task is used to control your robot during the autonomous phase of   */
-/*  a VEX Competition.                                                       */
-/*                                                                           */
-/*  You must modify the code to add your own robot specific commands here.   */
-/*---------------------------------------------------------------------------*/
+// robot center to right motors
+// FIXME: to be measured
+const auto FWD_TRACKER_CENTER_DISTANCE = 0; // in inches
 
-void autonomous(void) {
-  // ..........................................................................
-  // Insert autonomous user code here.
-  // ..........................................................................
-}
+Drive chassis(DRIVE_SETUP,
+  LeftMotors,
+  RightMotors,
+  INERTIAL_PORT,
+  WHEEL_DIAMETER,
+  EXTERNAL_RATIO,
+  GYRO_SCALE,
+  //If you are using ZERO_TRACKER_ODOM, you ONLY need to adjust the FORWARD TRACKER CENTER DISTANCE.
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*                              User Control Task                            */
-/*                                                                           */
-/*  This task is used to control your robot during the user control phase of */
-/*  a VEX Competition.                                                       */
-/*                                                                           */
-/*  You must modify the code to add your own robot specific commands here.   */
-/*---------------------------------------------------------------------------*/
+  //FOR HOLONOMIC DRIVES ONLY: Input your drive motors by position. This is only necessary for holonomic drives, otherwise this section can be left alone.
+  //LF:      //RF:    
+  PORT1, -PORT2,
 
-void usercontrol(void) {
-  // User control code here, inside the loop
-  while (1) {
-    // This is the main execution loop for the user control program.
-    // Each time through the loop your program should update motor + servo
-    // values based on feedback from the joysticks.
+  //LB:      //RB: 
+  PORT3, -PORT4,
 
-    // ........................................................................
-    // Insert user code here. This is where you use the joystick values to
-    // update your motors, etc.
-    // ........................................................................
+  //If you are using position tracking, this is the Forward Tracker port (the tracker which runs parallel to the direction of the chassis).
+  //If this is a rotation sensor, enter it in "PORT1" format, inputting the port below.
+  //If this is an encoder, enter the port as an integer. Triport A will be a "1", Triport B will be a "2", etc.
+  3,
 
-    wait(20, msec); // Sleep the task for a short amount of time to
-                    // prevent wasted resources.
+  //Input the Forward Tracker diameter (reverse it to make the direction switch):
+  2.75,
+
+  //Input Forward Tracker center distance (a positive distance corresponds to a tracker on the right side of the robot, negative is left.)
+  //For a zero tracker tank drive with odom, put the positive distance from the center of the robot to the right side of the drive.
+  //This distance is in inches:
+  FWD_TRACKER_CENTER_DISTANCE,
+
+  //Input the Sideways Tracker Port, following the same steps as the Forward Tracker Port:
+  1,
+
+  //Sideways tracker diameter (reverse to make the direction switch):
+  -2.75,
+
+  //Sideways tracker center distance (positive distance is behind the center of the robot, negative is in front):
+  5.5
+
+);
+
+int current_auton_selection = 0;
+bool auto_started = false;
+
+
+void pre_auton() {
+  default_constants();
+
+  while (!auto_started) {
+    Brain.Screen.clearScreen();
+    Brain.Screen.printAt(5, 40, "Battery:");
+    Brain.Screen.printAt(5, 60, "%d", Brain.Battery.capacity());
+    Brain.Screen.printAt(5, 80, "Chassis Heading Reading:");
+    Brain.Screen.printAt(5, 100, "%f", chassis.get_absolute_heading());
+    Brain.Screen.printAt(5, 120, "Selected Auton:");
+    switch (current_auton_selection) {
+    case 0:
+      Brain.Screen.printAt(5, 140, "Auton 1");
+      break;
+    case 1:
+      Brain.Screen.printAt(5, 140, "Auton 2");
+      break;
+    case 2:
+      Brain.Screen.printAt(5, 140, "Auton 3");
+      break;
+    case 3:
+      Brain.Screen.printAt(5, 140, "Auton 4");
+      break;
+    case 4:
+      Brain.Screen.printAt(5, 140, "Auton 5");
+      break;
+    case 5:
+      Brain.Screen.printAt(5, 140, "Auton 6");
+      break;
+    case 6:
+      Brain.Screen.printAt(5, 140, "Auton 7");
+      break;
+    case 7:
+      Brain.Screen.printAt(5, 140, "Auton 8");
+      break;
+    }
+    if (Brain.Screen.pressing()) {
+      while (Brain.Screen.pressing()) {}
+      current_auton_selection++;
+    } else if (current_auton_selection == 8) {
+      current_auton_selection = 0;
+    }
+    task::sleep(10);
   }
 }
 
-//
-// Main will set up the competition functions and callbacks.
-//
+void autonomous(void) {
+  auto_started = true;
+  switch (current_auton_selection) {
+  case 0:
+    drive_test();
+    break;
+  case 1:
+    drive_test();
+    break;
+  case 2:
+    turn_test();
+    break;
+  case 3:
+    swing_test();
+    break;
+  case 4:
+    full_test();
+    break;
+  case 5:
+    odom_test();
+    break;
+  case 6:
+    tank_odom_test();
+    break;
+  case 7:
+    holonomic_odom_test();
+    break;
+  }
+}
+
+void usercontrol(void) {
+  while (true) {
+    chassis.control_tank();
+    wait(20, msec);
+  }
+}
+
 int main() {
-  // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
 
-  // Run the pre-autonomous function.
   pre_auton();
 
-  // Prevent main from exiting with an infinite loop.
-  while (true) {
-    wait(100, msec);
-  }
+  while (true) wait(1000, msec);
 }
