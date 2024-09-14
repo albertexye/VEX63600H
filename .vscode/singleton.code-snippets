@@ -1,0 +1,27 @@
+{
+	"Singleton class": {
+		"scope": "c,cpp",
+		"prefix": "singleton",
+		"body": [
+			"class ${1:Singleton} {",
+			"private:",
+			"    /* avoid creating more instances */",
+			"    ${1:Singleton}() = default;",
+			"    ${1:Singleton}(const ${1:Singleton}&) = delete;",
+			"    ${1:Singleton}& operator=(const ${1:Singleton}&) = delete;",
+			"",
+			"public:",
+			"    /**",
+			"     * @brief Get the global instance",
+			"     *",
+			"     * @return the global instance",
+			"     */",
+			"    static ${1:Singleton}& getInstance() {",
+			"        static ${1:Singleton} instance{};",
+			"        return instance;",
+			"    }",
+			"};"
+		],
+		"description": "Create a singleton class"
+	}
+}
